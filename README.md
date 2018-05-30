@@ -16,10 +16,9 @@ To run RateLimitReport:
    * Specify the email accounts for recipients and for the account used to send emails.
    * Specify server, username and password for MongoDB
    * Specify DB and collection names of the central limits collection.
-4) Run RateLimitReport:
-     * You can run RateLimitReport with `python main.py`. This will keep RateLimitReport in the foreground.
-     * To run RateLimitReport in the background, use `python main.py &`. ServerReport keeps a log of stderr and stdout, so you don't need to tell RateLimitReport what to do with those two kinds of output in the command.
-     
+4) You can use crontab to run RateLimitReport daily. For example, to run the script at 1am;
+   * crontab -e 
+   * 0 1 * * * python /path/to/your/script/main.py
 ### Requirements
 
 RateLimitReport was developed and tested with Python3.
