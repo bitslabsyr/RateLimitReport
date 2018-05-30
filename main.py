@@ -13,7 +13,7 @@ import numpy as np
 import pymongo
 import logging
 
-import config_template as cfg
+import config as cfg
 
 logging.basicConfig(filename=cfg.script_log_file,filemode='a+',level=logging.INFO)
 
@@ -139,8 +139,7 @@ def run_rate_limits():
         logging.exception(e)
         script_error_email(e)
         
-    logging.info("Sleeping \n")
-    time.sleep(60)
+    logging.info("Daily report done. \n")
     
 
 if __name__ == '__main__':
