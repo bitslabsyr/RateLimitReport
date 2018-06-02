@@ -13,7 +13,7 @@ import numpy as np
 import pymongo
 import logging
 
-import config as cfg
+import config_template as cfg
 
 logging.basicConfig(filename=cfg.script_log_file,filemode='a+',level=logging.INFO)
 
@@ -85,7 +85,7 @@ def send_daily_rate_limit_email(rate_limits, email_recipients=cfg.daily_status_e
         status = 'OK'
         
     today = datetime.date.today()
-    yesterday = today.replace(day=(today.day - 1)).isoformat()
+    yesterday = today - datetime.timedelta(days=1)
 
     email_text = 'A Summary of Rate Limits Report for ' + yesterday + '\n '
     
