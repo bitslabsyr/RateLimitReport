@@ -12,13 +12,12 @@ RateLimitReport also sends a daily email update about the rate limits it monitor
 To run RateLimitReport:  
 1) Clone the code to your server using `git clone https://github.com/bitslabsyr/RateLimitReport.git`. You should run this command from a directory that your user has write permissions in; otherwise, you can run RateLimitReport as sudo.    
 2) Rename `config_template.py` to `config.py`.
-3) Modify the parameters in config.py to match your preferences.  
+3) Modify the parameters in config.py to match your preferences. 
+   * Specify the hour you want to receive email reports. 
    * Specify the email accounts for recipients and for the account used to send emails.
-   * Specify server, username and password for MongoDB
+   * Specify server, username and password for MongoDB.
    * Specify DB and collection names of the central limits collection.
-4) You can use crontab to run RateLimitReport daily. For example, to run the script at 1am;
-   * crontab -e 
-   * 0 1 * * * python /path/to/your/script/main.py
+4) Run RateLimitReport with `python3 RateLimitReport.py &`.
 ### Requirements
 
 RateLimitReport was developed and tested with Python3.
