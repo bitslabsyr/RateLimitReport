@@ -52,25 +52,6 @@ def check_rate_limit():
     
     return limits_agg
 
-def send_warning_email(warning_stats, email_recipients=cfg.warning_email_recipients):
-    """
-    This function sends an email with critical information. It is triggered based on trigger_warning_email.
-    """
-    if not type(email_recipients) is list:
-        raise Exception("Email recipients must be in a list")
-    email = EmailMessage()
-    email_text = '\n'.join(warning_stats[0])
-    email.set_content(email_text)
-    email['Subject'] = "{0}: {1} computer resources".format(cfg.server_name, warning_stats[1])
-    email['From'] = cfg.account_to_send_emails + '@gmail.com'
-    email['To'] = ", ".join(email_recipients)
-
-    server = smtplib.SMTP(cfg.email_server[0], cfg.email_server[1])
-    server.starttls()
-    server.login(cfg.account_to_send_emails, cfg.password_to_send_emails)
-    server.sendmail(email['From'], email_recipients, email.as_string())
-    server.quit()
-
 def send_daily_rate_limit_email(rate_limits, email_recipients=cfg.daily_status_email_recipients):
     """
     email_recipients should be a list.
@@ -87,7 +68,7 @@ def send_daily_rate_limit_email(rate_limits, email_recipients=cfg.daily_status_e
     today = datetime.date.today()
     yesterday = today - datetime.timedelta(days=1)
 
-    email_text = 'A Summary of Rate Limits Report for ' + yesterday + '\n '
+    email_text = 'A Summary of Rate Limits Report for ' + str(yesterday) + '\n '
     
     for server_name in rate_limits:
         email_text += '\n '
@@ -119,7 +100,7 @@ def script_error_email(error, email_recipients=cfg.warning_email_recipients):
     email = EmailMessage()
     email_text = "Server watch script error: \n\n {}".format(error)
     email.set_content(email_text)
-    email['Subject'] = "{0}: Critical - server watch error".format(cfg.server_name)
+    email['Subject'] = "{0}: Critical - rate limit code error".format(cfg.server_name)
     email['From'] = cfg.account_to_send_emails + '@gmail.com'
     email['To'] = ", ".join(email_recipients)
 
@@ -139,8 +120,15 @@ def run_rate_limits():
         logging.exception(e)
         script_error_email(e)
         
-    logging.info("Daily report done. \n")
+    logging.info("Daily report done. Sleeping until tomorrow.\n")
     
 
 if __name__ == '__main__':
-    run_rate_limits()
+    while True:
+        run_rate_limits()
+        sleep = True
+        while sleep:
+            time.sleep(60*60)
+            now = datetime.datetime.now()
+            if now.hour == cfg.time_to_run:
+                sleep = False
