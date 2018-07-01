@@ -34,7 +34,7 @@ def check_rate_limit():
     limits_agg = {}
     
     today = datetime.date.today()
-    yesterday = today.replace(day=(today.day - 1)).isoformat()
+    yesterday = today - datetime.timedelta(days=1)
     
     limits = mongoDB.find({'time': {'$gte': yesterday}})
     
